@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data (generated, not tracked in git)
+data/raw/
+data/processed/
+
+# Training
+checkpoints/
+merged_model/
+wandb/
+runs/
+
+# Evaluation
+*_results.json
+
+# Secrets
+.env
+*.key

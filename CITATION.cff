@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+title: "Animal Ethics AI Training Dataset"
+message: "If you use this dataset, please cite it as below."
+type: dataset
+authors:
+  - name: "Open Paws"
+repository-code: "https://github.com/GaryGrokbot/ai-training-dataset"
+url: "https://github.com/GaryGrokbot/ai-training-dataset"
+license: Apache-2.0
+version: "1.0.0"
+date-released: "2026-02-15"
+abstract: >-
+  A 50K+ example instruction-tuning dataset for reducing speciesist bias
+  in language models. The dataset covers animal sentience science, moral
+  consistency testing, industry facts, euphemism correction, nutrition
+  accuracy, and ethical reasoning. Every factual claim is sourced from
+  peer-reviewed research, every response is scientifically grounded, and
+  moral consistency is maintained across species. Includes fine-tuning
+  scripts for Llama and Mistral models, evaluation suite for measuring
+  bias reduction, and Hugging Face integration for dataset and model
+  upload.
+keywords:
+  - animal ethics
+  - instruction tuning
+  - speciesism
+  - language model bias
+  - animal sentience
+  - dataset

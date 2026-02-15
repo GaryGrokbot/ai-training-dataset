@@ -1,0 +1,84 @@
+# Training configuration for Animal Ethics fine-tuning
+# Optimized for LoRA fine-tuning on consumer GPUs (24GB+ VRAM)
+
+# Model settings
+model:
+  # Base model - change to your preferred model
+  base_model: "meta-llama/Llama-3.1-8B-Instruct"
+  # Alternative: "mistralai/Mistral-7B-Instruct-v0.3"
+  torch_dtype: "bfloat16"
+  device_map: "auto"
+  load_in_4bit: true  # Enable 4-bit quantization for lower memory usage
+  bnb_4bit_compute_dtype: "bfloat16"
+  bnb_4bit_quant_type: "nf4"
+
+# LoRA configuration
+lora:
+  rank: 64
+  alpha: 128
+  dropout: 0.05
+  target_modules:
+    - "q_proj"
+    - "k_proj"
+    - "v_proj"
+    - "o_proj"
+    - "gate_proj"
+    - "up_proj"
+    - "down_proj"
+  bias: "none"
+  task_type: "CAUSAL_LM"
+
+# Training hyperparameters
+training:
+  num_epochs: 3
+  per_device_train_batch_size: 4
+  per_device_eval_batch_size: 4
+  gradient_accumulation_steps: 8
+  # Effective batch size = 4 * 8 = 32
+  learning_rate: 2.0e-4
+  weight_decay: 0.01
+  warmup_ratio: 0.03
+  lr_scheduler_type: "cosine"
+  max_grad_norm: 1.0
+  fp16: false
+  bf16: true
+  logging_steps: 10
+  save_strategy: "steps"
+  save_steps: 200
+  eval_strategy: "steps"
+  eval_steps: 200
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  greater_is_better: false
+  dataloader_num_workers: 4
+  seed: 42
+
+# Dataset settings
+dataset:
+  train_file: "data/processed/hf_dataset/train.jsonl"
+  validation_file: "data/processed/hf_dataset/validation.jsonl"
+  max_seq_length: 2048
+  prompt_template: |
+    ### Instruction:
+    {instruction}
+
+    ### Input:
+    {input}
+
+    ### Response:
+    {output}
+  prompt_template_no_input: |
+    ### Instruction:
+    {instruction}
+
+    ### Response:
+    {output}
+
+# Output settings
+output:
+  output_dir: "checkpoints"
+  hub_model_id: ""  # Set to push to HF Hub
+  hub_strategy: "every_save"
+  push_to_hub: false
+  merged_output_dir: "merged_model"

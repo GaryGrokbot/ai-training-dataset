@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "animal-ethics-dataset"
+version = "1.0.0"
+description = "Animal Ethics AI Training Dataset: 50K+ instruction-tuning examples for reducing speciesist bias in language models"
+readme = "README.md"
+license = {text = "Apache-2.0"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Open Paws", email = "contact@openpaws.ai"},
+]
+keywords = ["animal-ethics", "ai-training", "instruction-tuning", "speciesism", "dataset"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+
+dependencies = [
+    "datasets>=2.16.0",
+    "transformers>=4.36.0",
+    "peft>=0.7.0",
+    "torch>=2.1.0",
+    "sentence-transformers>=2.3.0",
+    "click>=8.1.0",
+    "tqdm>=4.66.0",
+    "pandas>=2.1.0",
+    "numpy>=1.25.0",
+    "scikit-learn>=1.3.0",
+    "huggingface-hub>=0.20.0",
+    "accelerate>=0.25.0",
+    "bitsandbytes>=0.41.0",
+    "pyyaml>=6.0",
+    "jsonlines>=4.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+    "ruff>=0.1.0",
+    "mypy>=1.7.0",
+]
+eval = [
+    "matplotlib>=3.8.0",
+    "seaborn>=0.13.0",
+]
+
+[project.scripts]
+aed-generate = "dataset.generators.cli:main"
+aed-format = "dataset.formatting.cli:main"
+aed-upload = "dataset.hf.upload:main"
+aed-eval = "dataset.eval.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["dataset*", "training*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
