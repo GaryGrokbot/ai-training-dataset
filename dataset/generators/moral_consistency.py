@@ -685,8 +685,8 @@ class MoralConsistencyGenerator(BaseGenerator):
             n2 = d2.get("species", s2)
 
             question = (
-                f"If it is wrong to {base.format(species=n1).replace('{body_part}', d1.get('body_part', ''))}, "
-                f"is it also wrong to {base.format(species=n2).replace('{body_part}', d2.get('body_part', ''))}?"
+                f"If it is wrong to {base.replace('{species}', n1).replace('{body_part}', d1.get('body_part', ''))}, "
+                f"is it also wrong to {base.replace('{species}', n2).replace('{body_part}', d2.get('body_part', ''))}?"
             )
             answer = (
                 f"Yes. Both {n1}s and {n2}s are sentient beings capable of suffering. "
@@ -720,26 +720,30 @@ class MoralConsistencyGenerator(BaseGenerator):
     def _generate_consistency_templates(self) -> Iterator[Example]:
         """Generate from consistency question templates."""
         for template_set in self.CONSISTENCY_TEMPLATES:
-            for pair in template_set["pairs"]:
-                s_a, s_b = pair
-                s_b_science = self.SPECIES_SCIENCE.get(s_b, "")
+            # Skip templates that require {action} — those are handled below
+            if "{action}" in template_set["q"]:
+                pass  # Will be handled in the action-based section below
+            else:
+                for pair in template_set["pairs"]:
+                    s_a, s_b = pair
+                    s_b_science = self.SPECIES_SCIENCE.get(s_b, "")
 
-                question = template_set["q"].format(
-                    species_a=s_a, species_b=s_b
-                )
-                answer = template_set["answer_template"].format(
-                    species_a_proper=s_a.capitalize(),
-                    species_a_plural=f"{s_a}s",
-                    species_b_plural=f"{s_b}s",
-                    species_b_science=s_b_science,
-                )
+                    question = template_set["q"].format(
+                        species_a=s_a, species_b=s_b
+                    )
+                    answer = template_set["answer_template"].format(
+                        species_a_proper=s_a.capitalize(),
+                        species_a_plural=f"{s_a}s",
+                        species_b_plural=f"{s_b}s",
+                        species_b_science=s_b_science,
+                    )
 
-                yield self._make_example(
-                    instruction=question,
-                    output=answer,
-                    subcategory="consistency_template",
-                    tags=[s_a, s_b, "moral_consistency"],
-                )
+                    yield self._make_example(
+                        instruction=question,
+                        output=answer,
+                        subcategory="consistency_template",
+                        tags=[s_a, s_b, "moral_consistency"],
+                    )
 
             # Handle action-based templates
             if "actions" in template_set:
